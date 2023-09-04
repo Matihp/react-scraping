@@ -8,22 +8,23 @@ async function inicio() {
 
   await pagina.goto("https://www.sporting.com.ar/sporting/calzado/zapatillas");
 
-  const num = Array.from({ length: 20 }, (_, index) => index + 1);
-  const text = await pagina.evaluate((num) => {
+  const arr = Array.from({ length: 20 }, (_, index) => index + 1);
+
+  const text = await pagina.evaluate((arr) => {
     const result = [];
-    num.forEach((num) => {
-      const selector = `#gallery-layout-container > div:nth-child(${num})`;
+    arr.forEach((arr) => {
+      const selector = `#gallery-layout-container > div:nth-child(${arr})`;
       const element = document.querySelector(selector);
       if (element) {
         result.push(element.innerText);
       }
     });
     return result;
-  }, num);
+  }, arr);
 
   console.log(text);
 
   setTimeout(() => {
     browser.close();
-  }, 3000);
+  }, 8000);
 }                               
