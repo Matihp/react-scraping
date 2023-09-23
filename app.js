@@ -1,22 +1,30 @@
-puppe = require('puppeteer')              
-        
-inicio() 
+const puppeteer = require('puppeteer');
+
+inicio();
 
 async function inicio() {
+  const browser = await puppeteer.launch({ headless: 'new' });
+  const pagina = await browser.newPage();
 
-  browser = await puppe.launch({ headless: false });
+  await pagina.goto("https://www.sporting.com.ar/sporting/calzado/zapatillas");
 
-  pagina = await browser.newPage();
+  const arr = Array.from({ length: 20 }, (_, index) => index + 1);
 
-  await pagina.goto("https://www.dolarsi.com.ar/func/tool4.php");
-
-  let text = await pagina.evaluate(() => {
-    return document.querySelector("#v1").innerText;
-  });
+  const text = await pagina.evaluate((arr) => {
+    const result = [];
+    arr.forEach((arr) => {
+      const selector = `#gallery-layout-container > div:nth-child(${arr})`;
+      const element = document.querySelector(selector);
+      if (element) {
+        result.push(element.innerText);
+      }
+    });
+    return result;
+  }, arr);
 
   console.log(text);
-  
+
   setTimeout(() => {
     browser.close();
-  }, 1000);
-}                                        
+  }, 8000);
+}     
